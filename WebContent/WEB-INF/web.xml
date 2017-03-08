@@ -1,0 +1,14 @@
+<web-app>
+  <display-name>mancalaServlet</display-name>
+  <welcome-file-list>
+    <welcome-file>Mancala.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>  
+    <servlet-name>mancalaServlet</servlet-name>
+    <servlet-class>web.mancalaServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	<servlet-name>mancalaServlet</servlet-name>
+	<url-pattern>/mancalaServlet/*</url-pattern>
+  </servlet-mapping>
+</web-app>
