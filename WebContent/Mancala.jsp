@@ -5,15 +5,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Play Mancala with AI</title>
+<link rel="stylesheet" href="Mancala.css">
 <script src="http://code.jquery.com/jquery-1.10.2.js"
 	type="text/javascript"></script>
 <script src="js/app-ajax.js" type="text/javascript"></script>
 </head>
 <body>
+	<div id="log"></div>
 	<div id="ajaxGetUserServletResponse" align="center">
-	<h2><strong>Let's play Mancala!</strong></h2>
-	<div id="begin-section" ><button type="button" id="buttonBegin">Begin</button></div>
+		<h2><strong>Let's play Mancala!</strong></h2>
+		<div id="begin-section" ><button type="button" id="buttonBegin">Begin</button></div>
 	</div>
+	
 	<div id="responseSection" align="center">
 	</div>
 </body>

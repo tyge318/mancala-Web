@@ -10,7 +10,7 @@ $(document).ready(function(event) {
 		var body = document.getElementById('ajaxGetUserServletResponse');
 		body.innerHTML="";
 		var tbl = document.createElement('table');
-		tbl.style.width = '50%';
+		tbl.setAttribute('id', 'boardState');
 		tbl.setAttribute('border', '1');
 		var tbdy = document.createElement('tbody');
 		var tr = document.createElement('tr');
@@ -72,13 +72,22 @@ $(document).ready(function(event) {
 		title.appendChild(document.createTextNode('Current Board State:'))
 		
 		body.appendChild(title);
-		var message = document.createElement('div');
+		var message = document.createElement('h3');
 		message.setAttribute('id', 'message');
 		message.appendChild(document.createTextNode('You go first'));
 		body.appendChild(message);
-		body.appendChild(tbl); 
+		var wrapTable = document.createElement('div');
+		wrapTable.setAttribute('id', 'wrapTable');
+		wrapTable.setAttribute('align', 'right');
+		var checkBox = document.createElement('input');
+		checkBox.setAttribute('type', 'checkbox');
+		checkBox.setAttribute('id', 'showLog');
+		checkBox.setAttribute('onChange', 'displayLog(this.checked)');
+		wrapTable.appendChild(checkBox);
+		wrapTable.appendChild(document.createTextNode('Show AI log (miniMax depth 2 with alpha-beta pruning).'));
+		wrapTable.appendChild(tbl);
+		body.appendChild(wrapTable); 
 	});
-	
 	$(document).on('click', "button[id^='moveB']", function test() {
 		//alert('You clicked '+$(this).attr('id'));
 		$.ajax({
@@ -208,6 +217,24 @@ function moveOneStep(nextMove) {
 		}
 	})
 }
+function displayLog(status) {
+	if( status) {
+		$('#wrapTable').css('padding-right', '30%');
+		$('#log').show();
+	}
+	else {
+		$('#wrapTable').css('padding-right', '0');
+		$('#log').hide();
+	}
+}
+function updateLog(logMessage) {
+	//alert("@@@@@");
+	var logSection = document.getElementById('log');
+	logSection.innerHTML = "";
+	var textSection = document.createElement('pre');
+	textSection.innerHTML = "Best Moves: "+ logMessage;
+	logSection.appendChild(textSection);
+}
 function AIplayer() {
 	$.ajax({
 		url: 'mancalaServlet',
@@ -219,13 +246,12 @@ function AIplayer() {
 			mancalaB: manB
 		},
 		success: function(responseText) {
-			//alert("@@@@@@@@@@@@");
-			//$('#responseSection').text(responseText);
 			var tokens = responseText.split(";");
 			var AImoves = tokens[4].replace("root=>", "").split("=>");
 			//alert("AImoves = " + AImoves)
+			var logMessage = tokens[4].replace("root=>", "") + "\n" + "Traverse Log:\nNode, Depth, Value, Alpha, Beta+\n" + tokens[5];
+			updateLog(logMessage);
 			var message = document.getElementById('message');
-			
 			for(var i=0; i<=AImoves.length+1; i++) {
 				(function(i){
 					setTimeout(function(){
